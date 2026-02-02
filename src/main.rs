@@ -1,5 +1,6 @@
 mod yellow_client;
 mod arbitrage;
+mod uniswap;
 mod utils;
 
 use anyhow::Result;
