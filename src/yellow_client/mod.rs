@@ -9,7 +9,9 @@ pub struct YellowConfig {
 }
 
 pub struct YellowClient {
+    #[allow(dead_code)]
     config: YellowConfig,
+    #[allow(dead_code)]
     client: reqwest::Client,
 }
 
@@ -27,12 +29,12 @@ impl YellowClient {
         todo!("Implement state channel creation")
     }
 
-    pub async fn execute_trade(&self, amount: f64, from_token: &str, to_token: &str) -> Result<String> {
+    pub async fn execute_trade(&self, _amount: f64, _from_token: &str, _to_token: &str) -> Result<String> {
         // Placeholder - implement after reading docs
         todo!("Implement trade execution")
     }
 
-    pub async fn get_balance(&self, token: &str) -> Result<f64> {
+    pub async fn get_balance(&self, _token: &str) -> Result<f64> {
         // Placeholder
         todo!("Implement balance check")
     }
@@ -45,5 +47,12 @@ mod tests {
     #[tokio::test]
     async fn test_connection() {
         // Add basic connectivity test
+        let config = YellowConfig {
+            api_url: "https://testnet.yellow.org/api".to_string(),
+            api_key: "test".to_string(),
+            testnet: true,
+        };
+        let _client = YellowClient::new(config);
+        // Basic instantiation test
     }
 }
