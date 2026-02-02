@@ -1,6 +1,7 @@
 mod yellow_client;
 mod arbitrage;
 mod uniswap;
+mod lifi;
 mod utils;
 
 use anyhow::Result;
@@ -51,13 +52,7 @@ async fn main() -> Result<()> {
             }
         }
 
-        // Only run 3 iterations for demo, then exit
-        if iteration >= 3 {
-            info!("🛑 Demo mode: Stopping after 3 iterations");
-            break;
-        }
-
-        time::sleep(Duration::from_secs(5)).await;
+        time::sleep(Duration::from_secs(10)).await;
     }
 
     Ok(())
