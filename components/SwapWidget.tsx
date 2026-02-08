@@ -108,7 +108,7 @@ export function SwapWidget() {
   };
 
   return (
-    <div className="swap-widget">
+    <div className="swap-widget force-opaque-widget">
       <div className="widget-header">
         <h2>
           <Zap size={24} />
@@ -220,7 +220,9 @@ export function SwapWidget() {
         .swap-widget {
           width: 100%;
           max-width: 440px;
-          background: rgba(20, 20, 35, 0.65);
+          max-width: 440px;
+          background: #13141b;
+          border: 1px solid rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
           border: 1px solid rgba(255, 255, 255, 0.08);

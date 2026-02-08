@@ -122,7 +122,7 @@ export function CrossChainSwap({ userAddress }: CrossChainSwapProps) {
   };
 
   return (
-    <div className="cross-chain-swap">
+    <div className="cross-chain-swap force-opaque-widget">
       <div className="widget-header">
         <h2>
           <Zap size={24} />
@@ -274,7 +274,9 @@ export function CrossChainSwap({ userAddress }: CrossChainSwapProps) {
         .cross-chain-swap {
           width: 100%;
           max-width: 440px;
-          background: rgba(20, 20, 35, 0.65);
+          max-width: 440px;
+          background: #13141b;
+          border: 1px solid rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
           border: 1px solid rgba(255, 255, 255, 0.08);
