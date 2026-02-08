@@ -220,36 +220,43 @@ export function SwapWidget() {
         .swap-widget {
           width: 100%;
           max-width: 440px;
-          background: linear-gradient(
-            180deg,
-            rgba(26, 26, 46, 0.95) 0%,
-            rgba(22, 22, 40, 0.98) 100%
-          );
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
+          background: rgba(20, 20, 35, 0.65);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
           padding: 24px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+          box-shadow: 
+            0 25px 50px -12px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+          transition: transform 0.3s ease;
+        }
+        .swap-widget:hover {
+          box-shadow: 
+            0 30px 60px -12px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
         }
         .widget-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 20px;
+          margin-bottom: 24px;
         }
         .widget-header h2 {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
           font-size: 20px;
           font-weight: 600;
           color: #fff;
           margin: 0;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .refresh-button {
-          padding: 8px;
-          background: rgba(255, 255, 255, 0.05);
-          border: none;
-          border-radius: 8px;
+          padding: 10px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
           color: #888;
           cursor: pointer;
           transition: all 0.2s;
@@ -257,57 +264,63 @@ export function SwapWidget() {
         .refresh-button:hover {
           background: rgba(255, 255, 255, 0.1);
           color: #fff;
+          transform: rotate(180deg);
         }
         .input-section {
-          background: rgba(0, 0, 0, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 16px;
-          padding: 16px;
-          margin-bottom: 8px;
+          background: rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.03);
+          border-radius: 20px;
+          padding: 20px;
+          margin-bottom: 4px;
+          transition: border-color 0.2s;
+        }
+        .input-section:hover, .input-section:focus-within {
+          border-color: rgba(255, 255, 255, 0.1);
         }
         .input-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
         }
         .input-label {
           font-size: 13px;
-          color: #888;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          color: #9ca3af;
+          font-weight: 500;
         }
         .max-button {
-          padding: 4px 10px;
-          background: rgba(99, 102, 241, 0.2);
-          border: none;
-          border-radius: 6px;
-          color: #6366f1;
+          padding: 4px 12px;
+          background: rgba(99, 102, 241, 0.15);
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          border-radius: 8px;
+          color: #818cf8;
           font-size: 11px;
           font-weight: 600;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: all 0.2s;
         }
         .max-button:hover {
-          background: rgba(99, 102, 241, 0.3);
+          background: rgba(99, 102, 241, 0.25);
+          transform: scale(1.05);
         }
         .input-row {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
         }
         .amount-input {
           flex: 1;
           background: none;
           border: none;
           color: #fff;
-          font-size: 28px;
-          font-weight: 500;
+          font-size: 32px;
+          font-weight: 600;
           outline: none;
           min-width: 0;
+          letter-spacing: -0.5px;
         }
         .amount-input::placeholder {
-          color: #444;
+          color: #374151;
         }
         .amount-input::-webkit-outer-spin-button,
         .amount-input::-webkit-inner-spin-button {
@@ -315,82 +328,103 @@ export function SwapWidget() {
           margin: 0;
         }
         .output-row {
-          background: rgba(255, 255, 255, 0.02);
-          padding: 8px 12px;
-          border-radius: 12px;
+          padding: 4px 0;
         }
         .estimated-output {
           flex: 1;
-          font-size: 28px;
-          font-weight: 500;
+          font-size: 32px;
+          font-weight: 600;
           color: #22c55e;
+          letter-spacing: -0.5px;
+          text-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
         }
         .swap-direction {
           display: flex;
           justify-content: center;
-          margin: -4px 0;
+          margin: -14px 0;
           position: relative;
           z-index: 10;
+          height: 28px;
         }
         .swap-button {
-          padding: 10px;
-          background: #1a1a2e;
-          border: 4px solid #0f0f1a;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(30, 30, 45, 1);
+          border: 4px solid rgba(20, 20, 35, 1);
           border-radius: 12px;
-          color: #888;
+          color: #9ca3af;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         .swap-button:hover {
           color: #6366f1;
-          transform: rotate(180deg);
+          transform: scale(1.1) rotate(180deg);
+          background: #252535;
+          border-color: rgba(99, 102, 241, 0.5);
         }
         .error-message {
-          margin: 12px 0;
-          padding: 12px;
+          margin: 16px 0;
+          padding: 16px;
           background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.3);
-          border-radius: 8px;
-          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: 16px;
+          color: #f87171;
           font-size: 13px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
         .action-button {
           width: 100%;
-          padding: 16px;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
+          padding: 20px;
+          background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+          background-size: 200% 200%;
+          animation: gradient 5s ease infinite;
           border: none;
-          border-radius: 14px;
+          border-radius: 18px;
           color: white;
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 600;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 10px;
-          transition: all 0.2s;
-          margin-top: 16px;
+          gap: 12px;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          margin-top: 24px;
+          box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .action-button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
         }
         .action-button:disabled {
           opacity: 0.5;
           cursor: not-allowed;
+          background: #374151;
+          box-shadow: none;
+          animation: none;
         }
         .spinner {
-          width: 16px;
-          height: 16px;
+          width: 20px;
+          height: 20px;
           border: 2px solid rgba(255, 255, 255, 0.3);
           border-top-color: white;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
         @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
       `}</style>
     </div>
