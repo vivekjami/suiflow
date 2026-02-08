@@ -144,96 +144,55 @@ export function WalletConnect() {
       </button>
 
       {isOpen && (
-        <div className="modal-overlay force-opaque-overlay">
+        <>
+          {/* Overlay - Now a Sibling */}
+          <div
+            className="modal-overlay"
+            onClick={() => setIsOpen(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.85)',
+              zIndex: 19000, // Below modal
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)'
+            }}
+          />
+
+          {/* Modal - Now Independent Fixed Element */}
+
+          {/* Blue Box Clone - Should be OPAQUE */}
           <div
             id="super-final-wallet-modal"
             ref={modalRef}
             style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '480px',
-              backgroundColor: '#000000',
+              position: 'fixed',
+              top: '20%',
+              left: '20%',
+              width: '200px',
+              height: '200px',
+              backgroundColor: 'blue',
               zIndex: 20000,
-              padding: '24px',
-              borderRadius: '24px',
-              border: '10px solid lime',
-              color: 'red',
-              boxShadow: '0 50px 100px -20px rgba(0,0,0,0.9)'
-            }}
-          >
-            <div className="modal-header">
-              <h3 style={{ color: 'red' }}>Connect Wallet</h3>
-              <button className="close-btn" onClick={() => setIsOpen(false)}>
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="wallets-container">
-              {detectedWallets.length > 0 && (
-                <div className="wallet-group">
-                  <h4>Detected</h4>
-                  <div className="wallet-grid">
-                    {detectedWallets.map((wallet) => (
-                      <button
-                        key={wallet.name}
-                        className="wallet-card"
-                        onClick={() => handleConnect(wallet)}
-                      >
-                        <img src={wallet.icon} alt={wallet.name} className="wallet-img" />
-                        <span className="wallet-name">{wallet.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="wallet-group">
-                <h4>Popular</h4>
-                <div className="wallet-grid">
-                  {uninstalledPopularWallets.map((wallet) => (
-                    <a
-                      key={wallet.name}
-                      href={wallet.downloadUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="wallet-card install"
-                    >
-                      <div className="wallet-img-wrapper">
-                        {/* Placeholder if icon fails */}
-                        <div className="wallet-img-placeholder">{wallet.name[0]}</div>
-                      </div>
-                      <span className="wallet-name">{wallet.name}</span>
-                      <span className="install-tag">Install</span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontSize: '20px',
+              fontWeight: 'bold',
+              border: '5px solid yellow'
+            }}>
+            BLUE BOX CLONE
           </div>
-        </div>
-      {isOpen && (
-        <div style={{
-          position: 'fixed',
-          top: '20%',
-          left: '20%',
-          width: '200px',
-          height: '200px',
-          backgroundColor: 'blue',
-          zIndex: 99999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '20px',
-          fontWeight: 'bold',
-          border: '5px solid yellow'
-        }}>
-          BLUE BOX TEST
-        </div>
-      )}
-    </>
-  );
-}
+
+
+        </>
+      )
+      }
+
+
 
       <style jsx>{`
             .connect-btn {
