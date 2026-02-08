@@ -5,6 +5,7 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { WalletConnect } from '@/components/WalletConnect';
 import { SwapWidget } from '@/components/SwapWidget';
 import { CrossChainSwap } from '@/components/CrossChainSwap';
+import { NetworkSwitcher } from '@/components/NetworkSwitcher';
 import { Zap, ArrowRightLeft, Globe, Sparkles, Github } from 'lucide-react';
 
 type Tab = 'swap' | 'bridge';
@@ -29,6 +30,7 @@ export default function Home() {
           <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav-link">
             <Github size={20} />
           </a>
+          <NetworkSwitcher />
           <WalletConnect />
         </nav>
       </header>

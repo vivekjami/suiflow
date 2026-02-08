@@ -31,6 +31,7 @@ export async function POST(request: Request) {
             amount: body.amount,
             pools: body.pools,
             userPreferences: body.userPreferences,
+            network: body.network,
         });
 
         return NextResponse.json({

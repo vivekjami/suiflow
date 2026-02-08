@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SUPPORTED_SOURCE_CHAINS } from '@/lib/lifi-constants';
 import { CrossChainRoute } from '@/lib/types';
 import { ArrowRight, Clock, Wallet, Zap } from 'lucide-react';
@@ -11,6 +12,7 @@ interface CrossChainSwapProps {
 }
 
 export function CrossChainSwap({ userAddress }: CrossChainSwapProps) {
+  const ctx = useSuiClientContext();
   const [fromChain, setFromChain] = useState('ETHEREUM');
   const [amount, setAmount] = useState('');
   const [routes, setRoutes] = useState<CrossChainRoute[]>([]);
@@ -19,6 +21,43 @@ export function CrossChainSwap({ userAddress }: CrossChainSwapProps) {
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
   const [destinationInput, setDestinationInput] = useState('');
   const { address: resolvedSuiAddress, loading: resolvingENS } = useSuiAddressFromENS(destinationInput);
+
+  if (ctx.network === 'testnet') {
+    return (
+      <div className="testnet-warning">
+        <div className="warning-icon">⚠️</div>
+        <h3>Bridge Unavailable on Testnet</h3>
+        <p>Cross-chain bridging is currently only supported on Mainnet.</p>
+        <button
+          className="switch-btn"
+          onClick={() => ctx.selectNetwork('mainnet')}
+        >
+          Switch to Mainnet
+        </button>
+        <style jsx>{`
+            .testnet-warning {
+                text-align: center;
+                padding: 40px 20px;
+                color: #888;
+            }
+            .warning-icon {
+                font-size: 48px;
+                margin-bottom: 16px;
+            }
+            h3 { color: #fff; margin-bottom: 8px; }
+            .switch-btn {
+                margin-top: 20px;
+                padding: 10px 20px;
+                background: #6366f1;
+                border: none;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+            }
+        `}</style>
+      </div>
+    );
+  }
 
   const chains = Object.entries(SUPPORTED_SOURCE_CHAINS);
 

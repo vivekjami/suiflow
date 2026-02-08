@@ -12,6 +12,7 @@ export interface Pool {
     volume24h: number;
     price: number;
     estimatedSlippage?: number;
+    network?: 'mainnet' | 'testnet';
 }
 
 export interface RouteStep {
@@ -51,6 +52,7 @@ export interface OptimizationRequest {
         maxSlippage?: number;
         prioritize?: 'speed' | 'cost' | 'safety';
     };
+    network?: 'mainnet' | 'testnet';
 }
 
 export interface CrossChainRoute {

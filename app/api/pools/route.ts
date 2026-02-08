@@ -12,13 +12,14 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const tokenA = searchParams.get('tokenA');
     const tokenB = searchParams.get('tokenB');
+    const network = (searchParams.get('network') as 'mainnet' | 'testnet') || 'mainnet';
 
     try {
         // Fetch from all DEXs in parallel
         const [cetusPools, turbosPools, kriyaPools] = await Promise.all([
-            getCetusPools(),
-            getTurbosPools(),
-            getKriyaPools(),
+            getCetusPools(network),
+            getTurbosPools(network),
+            getKriyaPools(network),
         ]);
 
         let allPools: Pool[] = [...cetusPools, ...turbosPools, ...kriyaPools];

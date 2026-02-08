@@ -71,7 +71,7 @@ export async function optimizeRouteWithAI(
  * Builds the optimization prompt for Gemini
  */
 function buildOptimizationPrompt(request: OptimizationRequest): string {
-    const { tokenA, tokenB, amount, pools, userPreferences } = request;
+    const { tokenA, tokenB, amount, pools, userPreferences, network } = request;
 
     // Calculate estimated slippage for each pool
     const poolsWithSlippage = pools.map(pool => ({
@@ -79,7 +79,12 @@ function buildOptimizationPrompt(request: OptimizationRequest): string {
         estimatedSlippage: calculateSlippage(pool, amount),
     }));
 
-    return `You are an expert DeFi routing optimizer for the Sui blockchain. Analyze the following swap opportunity and return the optimal execution path.
+    const networkContext = network === 'testnet'
+        ? "NOTE: You are analyzing SUI TESTNET pools. Liquidity may be simulated or low. Treat all pools as valid for testnet purposes."
+        : "";
+
+    return `You are an expert DeFi routing optimizer for the Sui blockchain (${network || 'mainnet'}). ${networkContext}
+Analyze the following swap opportunity and return the optimal execution path.
 
 ## SWAP REQUEST
 - Input: ${amount} ${tokenA}

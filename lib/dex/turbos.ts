@@ -26,7 +26,11 @@ interface TurbosPoolData {
 /**
  * Fetches all available pools from Turbos DEX
  */
-export async function getTurbosPools(): Promise<Pool[]> {
+export async function getTurbosPools(network: 'mainnet' | 'testnet' = 'mainnet'): Promise<Pool[]> {
+    if (network === 'testnet') {
+        return getMockTurbosPools().map(p => ({ ...p, network: 'testnet' }));
+    }
+
     try {
         const response = await fetch(`${TURBOS_API_BASE}/pools`, {
             headers: {
@@ -37,13 +41,13 @@ export async function getTurbosPools(): Promise<Pool[]> {
 
         if (!response.ok) {
             console.error('Turbos API error:', response.status);
-            return getMockTurbosPools();
+            return getMockTurbosPools().map(p => ({ ...p, network: 'mainnet' }));
         }
 
         const data = await response.json();
 
         if (!data.pools || !Array.isArray(data.pools)) {
-            return getMockTurbosPools();
+            return getMockTurbosPools().map(p => ({ ...p, network: 'mainnet' }));
         }
 
         return data.pools.slice(0, 50).map((pool: TurbosPoolData) => ({
@@ -57,10 +61,11 @@ export async function getTurbosPools(): Promise<Pool[]> {
             fee: pool.fee / 10000,
             volume24h: parseFloat(pool.volume24h) || 0,
             price: parseFloat(pool.price) || 1,
+            network: 'mainnet',
         }));
     } catch (error) {
         console.error('Failed to fetch Turbos pools:', error);
-        return getMockTurbosPools();
+        return getMockTurbosPools().map(p => ({ ...p, network: 'mainnet' }));
     }
 }
 

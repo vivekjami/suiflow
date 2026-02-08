@@ -20,7 +20,11 @@ interface CetusPoolData {
 /**
  * Fetches all available pools from Cetus DEX
  */
-export async function getCetusPools(): Promise<Pool[]> {
+export async function getCetusPools(network: 'mainnet' | 'testnet' = 'mainnet'): Promise<Pool[]> {
+    if (network === 'testnet') {
+        return getMockCetusPools().map(p => ({ ...p, network: 'testnet' }));
+    }
+
     try {
         const response = await fetch(`${CETUS_API_BASE}/v2/sui/pools`, {
             headers: {
@@ -31,13 +35,13 @@ export async function getCetusPools(): Promise<Pool[]> {
 
         if (!response.ok) {
             console.error('Cetus API error:', response.status);
-            return getMockCetusPools(); // Fallback to mock data
+            return getMockCetusPools().map(p => ({ ...p, network: 'mainnet' })); // Fallback to mock data
         }
 
         const data = await response.json();
 
         if (!data.data || !Array.isArray(data.data)) {
-            return getMockCetusPools();
+            return getMockCetusPools().map(p => ({ ...p, network: 'mainnet' }));
         }
 
         return data.data.slice(0, 50).map((pool: CetusPoolData) => ({
@@ -51,10 +55,11 @@ export async function getCetusPools(): Promise<Pool[]> {
             fee: pool.fee_rate / 10000, // Convert basis points to percentage
             volume24h: parseFloat(pool.volume_24h) || 0,
             price: sqrtPriceToPrice(pool.current_sqrt_price),
+            network: 'mainnet',
         }));
     } catch (error) {
         console.error('Failed to fetch Cetus pools:', error);
-        return getMockCetusPools();
+        return getMockCetusPools().map(p => ({ ...p, network: 'mainnet' }));
     }
 }
 

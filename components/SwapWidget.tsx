@@ -1,220 +1,222 @@
 'use client';
 
 import { useState } from 'react';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
 import { TokenSelect } from './TokenSelect';
 import { RouteDisplay } from './RouteDisplay';
 import { Pool, OptimizedRoute } from '@/lib/types';
 import { ArrowDownUp, RefreshCw, Zap } from 'lucide-react';
 
 export function SwapWidget() {
-    const account = useCurrentAccount();
-    const [tokenA, setTokenA] = useState('USDC');
-    const [tokenB, setTokenB] = useState('SUI');
-    const [amount, setAmount] = useState('');
-    const [route, setRoute] = useState<OptimizedRoute | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [executing, setExecuting] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const account = useCurrentAccount();
+  const ctx = useSuiClientContext();
+  const [tokenA, setTokenA] = useState('USDC');
+  const [tokenB, setTokenB] = useState('SUI');
+  const [amount, setAmount] = useState('');
+  const [route, setRoute] = useState<OptimizedRoute | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [executing, setExecuting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const handleSwapTokens = () => {
-        setTokenA(tokenB);
-        setTokenB(tokenA);
-        setRoute(null);
-    };
+  const handleSwapTokens = () => {
+    setTokenA(tokenB);
+    setTokenB(tokenA);
+    setRoute(null);
+  };
 
-    const handleFindRoutes = async () => {
-        if (!amount || parseFloat(amount) <= 0) {
-            setError('Please enter an amount');
-            return;
-        }
+  const handleFindRoutes = async () => {
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Please enter an amount');
+      return;
+    }
 
-        setLoading(true);
-        setError(null);
-        setRoute(null);
+    setLoading(true);
+    setError(null);
+    setRoute(null);
 
-        try {
-            // Step 1: Fetch pools from all DEXs
-            const poolsResponse = await fetch(
-                `/api/pools?tokenA=${tokenA}&tokenB=${tokenB}`
-            );
+    try {
+      // Step 1: Fetch pools from all DEXs
+      const poolsResponse = await fetch(
+        `/api/pools?tokenA=${tokenA}&tokenB=${tokenB}&network=${ctx.network}`
+      );
 
-            if (!poolsResponse.ok) {
-                throw new Error('Failed to fetch pools');
-            }
+      if (!poolsResponse.ok) {
+        throw new Error('Failed to fetch pools');
+      }
 
-            const poolsData = await poolsResponse.json();
-            const pools: Pool[] = poolsData.pools;
+      const poolsData = await poolsResponse.json();
+      const pools: Pool[] = poolsData.pools;
 
-            if (pools.length === 0) {
-                throw new Error('No liquidity pools found for this pair');
-            }
+      if (pools.length === 0) {
+        throw new Error('No liquidity pools found for this pair');
+      }
 
-            // Step 2: Get AI optimization
-            const optimizeResponse = await fetch('/api/optimize', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    tokenA,
-                    tokenB,
-                    amount: parseFloat(amount),
-                    pools,
-                    userPreferences: {
-                        prioritize: 'balanced',
-                        maxSlippage: 3,
-                    },
-                }),
-            });
+      // Step 2: Get AI optimization
+      const optimizeResponse = await fetch('/api/optimize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tokenA,
+          tokenB,
+          amount: parseFloat(amount),
+          pools,
+          userPreferences: {
+            prioritize: 'balanced',
+            maxSlippage: 3,
+          },
+          network: ctx.network,
+        }),
+      });
 
-            if (!optimizeResponse.ok) {
-                throw new Error('Route optimization failed');
-            }
+      if (!optimizeResponse.ok) {
+        throw new Error('Route optimization failed');
+      }
 
-            const optimizeData = await optimizeResponse.json();
-            setRoute(optimizeData.route);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'An error occurred');
-        } finally {
-            setLoading(false);
-        }
-    };
+      const optimizeData = await optimizeResponse.json();
+      setRoute(optimizeData.route);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const handleExecuteSwap = async () => {
-        if (!route || !account) return;
+  const handleExecuteSwap = async () => {
+    if (!route || !account) return;
 
-        setExecuting(true);
-        setError(null);
+    setExecuting(true);
+    setError(null);
 
-        try {
-            // In production, this would:
-            // 1. Build the transaction using Sui SDK
-            // 2. Sign with the connected wallet
-            // 3. Submit to the Sui network
-            // 4. Wait for confirmation
+    try {
+      // In production, this would:
+      // 1. Build the transaction using Sui SDK
+      // 2. Sign with the connected wallet
+      // 3. Submit to the Sui network
+      // 4. Wait for confirmation
 
-            // For demo, we'll simulate a delay
-            await new Promise(resolve => setTimeout(resolve, 2000));
+      // For demo, we'll simulate a delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-            alert('Swap executed successfully! (Demo mode)');
-            setRoute(null);
-            setAmount('');
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Swap execution failed');
-        } finally {
-            setExecuting(false);
-        }
-    };
+      alert('Swap executed successfully! (Demo mode)');
+      setRoute(null);
+      setAmount('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Swap execution failed');
+    } finally {
+      setExecuting(false);
+    }
+  };
 
-    return (
-        <div className="swap-widget">
-            <div className="widget-header">
-                <h2>
-                    <Zap size={24} />
-                    Swap
-                </h2>
-                <button className="refresh-button" onClick={() => setRoute(null)} title="Reset">
-                    <RefreshCw size={18} />
-                </button>
-            </div>
+  return (
+    <div className="swap-widget">
+      <div className="widget-header">
+        <h2>
+          <Zap size={24} />
+          Swap
+        </h2>
+        <button className="refresh-button" onClick={() => setRoute(null)} title="Reset">
+          <RefreshCw size={18} />
+        </button>
+      </div>
 
-            {/* From Token */}
-            <div className="input-section">
-                <div className="input-header">
-                    <span className="input-label">From</span>
-                    {account && (
-                        <button
-                            className="max-button"
-                            onClick={() => setAmount('1000')} // Demo: set to 1000
-                        >
-                            MAX
-                        </button>
-                    )}
-                </div>
-                <div className="input-row">
-                    <input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => {
-                            setAmount(e.target.value);
-                            setRoute(null);
-                        }}
-                        placeholder="0.0"
-                        className="amount-input"
-                        min="0"
-                        step="any"
-                    />
-                    <TokenSelect
-                        value={tokenA}
-                        onChange={(v) => {
-                            setTokenA(v);
-                            setRoute(null);
-                        }}
-                        excludeToken={tokenB}
-                    />
-                </div>
-            </div>
+      {/* From Token */}
+      <div className="input-section">
+        <div className="input-header">
+          <span className="input-label">From</span>
+          {account && (
+            <button
+              className="max-button"
+              onClick={() => setAmount('1000')} // Demo: set to 1000
+            >
+              MAX
+            </button>
+          )}
+        </div>
+        <div className="input-row">
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+              setRoute(null);
+            }}
+            placeholder="0.0"
+            className="amount-input"
+            min="0"
+            step="any"
+          />
+          <TokenSelect
+            value={tokenA}
+            onChange={(v) => {
+              setTokenA(v);
+              setRoute(null);
+            }}
+            excludeToken={tokenB}
+          />
+        </div>
+      </div>
 
-            {/* Swap Direction Button */}
-            <div className="swap-direction">
-                <button className="swap-button" onClick={handleSwapTokens}>
-                    <ArrowDownUp size={18} />
-                </button>
-            </div>
+      {/* Swap Direction Button */}
+      <div className="swap-direction">
+        <button className="swap-button" onClick={handleSwapTokens}>
+          <ArrowDownUp size={18} />
+        </button>
+      </div>
 
-            {/* To Token */}
-            <div className="input-section">
-                <div className="input-header">
-                    <span className="input-label">To</span>
-                </div>
-                <div className="input-row output-row">
-                    <div className="estimated-output">
-                        {route ? route.recommended.totalOutput : '0.0'}
-                    </div>
-                    <TokenSelect
-                        value={tokenB}
-                        onChange={(v) => {
-                            setTokenB(v);
-                            setRoute(null);
-                        }}
-                        excludeToken={tokenA}
-                    />
-                </div>
-            </div>
+      {/* To Token */}
+      <div className="input-section">
+        <div className="input-header">
+          <span className="input-label">To</span>
+        </div>
+        <div className="input-row output-row">
+          <div className="estimated-output">
+            {route ? route.recommended.totalOutput : '0.0'}
+          </div>
+          <TokenSelect
+            value={tokenB}
+            onChange={(v) => {
+              setTokenB(v);
+              setRoute(null);
+            }}
+            excludeToken={tokenA}
+          />
+        </div>
+      </div>
 
-            {/* Error Display */}
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
+      {/* Error Display */}
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
 
-            {/* Find Routes Button */}
-            {!route && (
-                <button
-                    className="action-button"
-                    onClick={handleFindRoutes}
-                    disabled={!account || !amount || loading}
-                >
-                    {!account
-                        ? 'Connect Wallet to Swap'
-                        : loading
-                            ? 'Finding Best Route...'
-                            : 'Find Best Route'
-                    }
-                    {loading && <span className="spinner" />}
-                </button>
-            )}
+      {/* Find Routes Button */}
+      {!route && (
+        <button
+          className="action-button"
+          onClick={handleFindRoutes}
+          disabled={!account || !amount || loading}
+        >
+          {!account
+            ? 'Connect Wallet to Swap'
+            : loading
+              ? 'Finding Best Route...'
+              : 'Find Best Route'
+          }
+          {loading && <span className="spinner" />}
+        </button>
+      )}
 
-            {/* Route Display */}
-            {route && (
-                <RouteDisplay
-                    route={route}
-                    onExecute={handleExecuteSwap}
-                    loading={executing}
-                />
-            )}
+      {/* Route Display */}
+      {route && (
+        <RouteDisplay
+          route={route}
+          onExecute={handleExecuteSwap}
+          loading={executing}
+        />
+      )}
 
-            <style jsx>{`
+      <style jsx>{`
         .swap-widget {
           width: 100%;
           max-width: 440px;
@@ -391,6 +393,6 @@ export function SwapWidget() {
           }
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

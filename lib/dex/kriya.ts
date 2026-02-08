@@ -24,7 +24,11 @@ interface KriyaPoolData {
 /**
  * Fetches all available pools from Kriya DEX using GraphQL
  */
-export async function getKriyaPools(): Promise<Pool[]> {
+export async function getKriyaPools(network: 'mainnet' | 'testnet' = 'mainnet'): Promise<Pool[]> {
+    if (network === 'testnet') {
+        return getMockKriyaPools().map(p => ({ ...p, network: 'testnet' }));
+    }
+
     const query = `
     query GetPools {
       pools {
@@ -49,13 +53,13 @@ export async function getKriyaPools(): Promise<Pool[]> {
 
         if (!response.ok) {
             console.error('Kriya API error:', response.status);
-            return getMockKriyaPools();
+            return getMockKriyaPools().map(p => ({ ...p, network: 'mainnet' }));
         }
 
         const { data } = await response.json();
 
         if (!data?.pools || !Array.isArray(data.pools)) {
-            return getMockKriyaPools();
+            return getMockKriyaPools().map(p => ({ ...p, network: 'mainnet' }));
         }
 
         return data.pools.slice(0, 50).map((pool: KriyaPoolData) => ({
@@ -69,10 +73,11 @@ export async function getKriyaPools(): Promise<Pool[]> {
             fee: pool.fee / 10000,
             volume24h: pool.volume24h || 0,
             price: pool.price || 1,
+            network: 'mainnet',
         }));
     } catch (error) {
         console.error('Failed to fetch Kriya pools:', error);
-        return getMockKriyaPools();
+        return getMockKriyaPools().map(p => ({ ...p, network: 'mainnet' }));
     }
 }
 
