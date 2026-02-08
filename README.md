@@ -1,7 +1,6 @@
 # SuiFlow: AI-Powered DEX Aggregator for Sui
 
 <div align="center">
-  <img src="public/logo.png" alt="SuiFlow Logo" width="120">
   <h3>Intelligent Swaps, Optimal Routes, Cross-Chain Bridge</h3>
   <p>Powered by Google Gemini 2.5 Flash & LI.FI</p>
 
