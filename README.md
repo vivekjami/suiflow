@@ -1,115 +1,110 @@
-# ⚡ Instant Arb - Gasless Arbitrage Engine
+# SuiFlow: AI-Powered DEX Aggregator for Sui
 
-**HackMoney 2026 Submission**
+<div align="center">
+  <img src="public/logo.png" alt="SuiFlow Logo" width="120">
+  <h3>Intelligent Swaps, Optimal Routes, Cross-Chain Bridge</h3>
+  <p>Powered by Google Gemini 2.5 Flash & LI.FI</p>
 
-## 🎯 The Problem
-
-High-frequency trading bots executing arbitrage strategies across DEXes waste an estimated **$150,000+ per year** on Ethereum gas fees. For arbitrage opportunities with thin margins (0.5-2%), gas costs can completely eliminate profitability.
-
-## 💡 The Solution
-
-**Instant Arb** leverages Yellow Network's state channels to execute arbitrage trades with **zero gas costs**, making even small arbitrage opportunities profitable.
-
-### Key Features
-
-- ⚡ **Gasless Execution**: State channels eliminate gas fees
-- 🤖 **Automated Detection**: Real-time price monitoring across 10+ DEXes
-- 🔗 **Multi-Chain**: Cross-chain arbitrage via LI.FI integration
-- 📊 **Live Dashboard**: Track profits and gas savings in real-time
-- 🚀 **High Performance**: Rust backend for sub-second execution
-
-## 🏗️ Architecture
-
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│ Price Feeds │────▶│ Arb Detector │────▶│  Executor   │
-│ (DEX APIs)  │     │ (Rust Core)  │     │  (Yellow)   │
-└─────────────┘     └──────────────┘     └─────────────┘
-                                                │
-                                                ▼
-                                         ┌─────────────┐
-                                         │  Dashboard  │
-                                         │  (Next.js)  │
-                                         └─────────────┘
-```
-
-## 🛠️ Tech Stack
-
-**Backend:**
-- Rust (core arbitrage engine)
-- Yellow Network SDK (state channels)
-- Uniswap v4 SDK (liquidity source)
-- LI.FI SDK (cross-chain routing)
-
-**Frontend:**
-- Next.js + TypeScript
-- Tailwind CSS
-- Recharts (visualization)
-
-## 📊 Results
-
-**Testnet Performance (Feb 2-5, 2026):**
-- ✅ 47 successful arbitrage trades
-- 💰 $127.50 total profit (simulated)
-- ⛽ $0.00 gas costs (vs $89.20 on Ethereum mainnet)
-- 📈 100% gas savings
-
-## 🚀 Quick Start
-
-### Prerequisites
-```bash
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# Install Node.js 18+
-```
-
-### Backend Setup
-```bash
-git clone https://github.com/YOUR_USERNAME/instant-arb
-cd instant-arb
-
-# Configure environment
-cp .env.example .env
-# Add your Yellow API key
-
-# Run the engine
-cargo run --release
-```
-
-### Dashboard Setup
-```bash
-cd dashboard
-npm install
-npm run dev
-```
-
-## 🎬 Demo Video
-
-[Link to Loom/YouTube demo - 3 minutes]
-
-## 🏆 HackMoney Prizes Targeted
-
-- **Yellow Network** ($500-$15k): State channel integration
-- **Uniswap v4** ($1k-$5k): Autonomous trading agent
-- **LI.FI** ($300-$2k): Cross-chain strategy
-
-## 🔮 Future Roadmap
-
-- [ ] Mainnet deployment
-- [ ] ML-based opportunity prediction
-- [ ] Multi-token support (currently ETH/USDC only)
-- [ ] MEV protection
-- [ ] Mobile alerts
-
-## 👤 Team
-
-Built solo by [Your Name] - Rust backend engineer with trading systems experience
-
-## 📄 License
-
-MIT
+  [Demo](https://suiflow.app) • [Discord](https://discord.gg/suiflow) • [Docs](https://docs.suiflow.app)
+</div>
 
 ---
 
-**Built for HackMoney 2026** | Powered by Yellow Network
+## 🚀 Overview
+
+SuiFlow is the first **AI-powered DEX aggregator** on the Sui blockchain. Instead of relying solely on static algorithms, SuiFlow uses **Google Gemini 2.5 Flash** to analyze liquidity pools across multiple DEXs (Cetus, Turbos, Kriya) in real-time, considering slippage, fees, gas costs, and market volatility to recommend the absolute best swap route.
+
+It also features a seamless **cross-chain bridge** powered by LI.FI, allowing users to move assets from Ethereum, Polygon, and Arbitrum directly to Sui in a single click.
+
+## ✨ Key Features
+
+- **🤖 AI Route Optimization**: Google Gemini 2.5 Flash analyzes liquidity depth and volatility to find routes that static aggregators miss.
+- **💧 Multi-DEX Aggregation**: Integrates Cetus, Turbos, and Kriya for maximum liquidity.
+- **🌉 Cross-Chain Bridge**: One-click bridging from EVM chains to Sui via LI.FI.
+- **🏷️ ENS Integration**: Displays human-readable names (e.g., `usdc.eth`, `vitalik.eth`) for better UX.
+- **⚡ Lightning Fast**: Built on Next.js 14 and Sui's high-speed network.
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **AI Engine**: Google Gemini 2.5 Flash (`@google/generative-ai`)
+- **Blockchain**: Sui Mainnet (`@mysten/sui`, `@mysten/dapp-kit`)
+- **Cross-Chain**: LI.FI SDK (`@lifi/sdk`)
+- **Identity**: ENS (`viem`)
+
+## 📦 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/suiflow.git
+   cd suiflow
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   Create a `.env.local` file with the following keys:
+   ```bash
+   # Google Gemini API (for AI routing)
+   GOOGLE_AI_API_KEY=your_gemini_key
+
+   # LI.FI API (for cross-chain)
+   LIFI_API_KEY=your_lifi_key
+
+   # Alchemy/Infura (for ENS resolution)
+   NEXT_PUBLIC_ALCHEMY_KEY=your_alchemy_key
+   ```
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open in browser**
+   Visit `http://localhost:3000` to see the app.
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User[User] --> UI[Next.js UI]
+    UI --> Wallet[Sui Wallet]
+    UI --> API[API Routes]
+    
+    API --> Gemini[Google Gemini 2.5]
+    API --> DEXs[DEX Aggregator]
+    API --> Bridge[LI.FI Bridge]
+    
+    DEXs --> Cetus[Cetus]
+    DEXs --> Turbos[Turbos]
+    DEXs --> Kriya[Kriya]
+    
+    Gemini -- Optimization --> UI
+    Bridge -- Cross-Chain --> UI
+```
+
+## 🧪 Testing
+
+Run the test suite to verify routing logic and API integrations:
+
+```bash
+# Run unit tests
+npm test
+
+# Run linting
+npm run lint
+```
+
+## 📜 License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+## 🙏 Acknowledgements
+
+- **Sui Foundation** for the amazing blockchain infrastructure.
+- **Google Cloud** for the Gemini AI model.
+- **LI.FI** for the cross-chain SDK.
+- **ENS** for the identity layer.

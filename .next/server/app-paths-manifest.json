@@ -1,0 +1,9 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/cross-chain/route": "app/api/cross-chain/route.js",
+  "/api/optimize/route": "app/api/optimize/route.js",
+  "/api/pools/route": "app/api/pools/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js"
+}
